@@ -2,9 +2,9 @@
 
 # Replace the following placeholders with your information.
 
-# NAME
-# EMAIL
-# STUDENT ID
+# Trevor Walker
+# walkertk@uci.edu
+# 35049080
 
 def send(server:str, port:int, username:str, password:str, message:str, bio:str=None):
   '''
