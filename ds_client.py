@@ -7,6 +7,15 @@
 # 35049080
 
 def send(server:str, port:int, username:str, password:str, message:str, bio:str=None):
+  with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client:
+    client.connect((server, port))
+    print("client connected to {server} on {port}")
+    
+    # need to figure out how to put into JSON object here probably best to create a file with a2 stuff because it stores it in json format
+    # json_message = json(message)
+    
+    clinet.sendall(json_message)
+    
   '''
   The send function joins a ds server and sends a message, bio, or both
   :param server: The ip address for the ICS 32 DS server.
