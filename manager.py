@@ -164,7 +164,7 @@ def run():
         run()
     elif a == 'Q':  # quit program when user inputs Q
         if not admin:
-            print(a3.goodbye)
+            print('have a great day!')
         quit()
     elif a == 'admin' and first:    # activates admin mode only and only if it's first user input
         first = False
