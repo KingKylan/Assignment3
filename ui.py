@@ -48,7 +48,7 @@ P = Print data in the DSU file loaded by C or O commands
 {'='*100}
 """
 
-
+ask_server = 'Server: '
 file_dont_exist = "file doesn't exists"
 error = 'ERROR'
 empty = 'EMPTY'
