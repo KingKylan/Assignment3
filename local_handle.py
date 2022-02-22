@@ -1,3 +1,6 @@
+# Trevor Walker
+# walkertk@uci.edu
+# 35049080
 from pathlib import Path
 from os import remove
 import a3
