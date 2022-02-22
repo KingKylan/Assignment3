@@ -3,6 +3,7 @@ from os import remove
 import a3
 import manager
 from Profile import Profile, Post
+import ds_client
 
 profile1 = Profile()
 post = Post()
@@ -10,11 +11,14 @@ flag = False
 p1 = ''
 p = ''
 first = True
+PORT = 3021
 
 '''This function created the .dsu file, ask for basic user information and declare globally the path <=> user profile'''
 
-
-def create(path, name, flag_dsu=False):
+'''given the path and the name of the file, it checks if the file exists, if yes, return to run()
+if file do not exist, the function create a .dsu file with the given name
+When file created, username, password and bio are created and stored locally in the .dsu file in JSON format'''
+def create(path, name):
     global p1
     p = Path(path)
     p1 = p / f'{name}.dsu'
@@ -34,9 +38,10 @@ def create(path, name, flag_dsu=False):
             remove(p1)
             create(path, name)
         bio = input(a3.ask_bio)
+        dsu_server = input(a3.ask_server)
 
-        profile1.username, profile1.password, profile1.bio, profile1._posts = username, password, bio, []  # save user's informations
-        Profile.save_profile(profile1, p1)
+        profile1.username, profile1.password, profile1.bio, profile1._posts, profile1.dsuserver = username, password, bio, [], dsu_server  # save user's informations in local variables
+        Profile.save_profile(profile1, p1)  # upload the local variables to the file
         if manager.admin == False:
             print(a3.loaded)
             print('File path: ', p1)
@@ -44,13 +49,14 @@ def create(path, name, flag_dsu=False):
         if manager.admin == False:
             print(a3.exists)
         pass
-    if not flag_dsu:
-        manager.run()
-    else:
-        pass
+    manager.run()
 
-# Load profile given the path precedently took. Profile do not get saved to avoid duplicates
-def open(path, name, flag_dsu=False):
+
+'''The function upload a profile to the program from a .dsu file given a specific path.
+If file do not exists, rise an error and return to run()'''
+def open(path, name):
+    print(path)
+    global flag
     global p1, p
     lista = []
     p1 = Path(path)
@@ -78,12 +84,10 @@ def open(path, name, flag_dsu=False):
             print(element)
     else:
         print(a3.error)
-    if not flag_dsu:
-        manager.run()
-    else:
-        pass
+    manager.run()
 
-# delete a file
+
+# delete a file given a specific path, if file do not exist, rise error
 def dell(path, name):
     p = Path(path)
     p1 = p / name
@@ -97,7 +101,7 @@ def dell(path, name):
     manager.run()
 
 
-# read the file, user is not saved and not uploaded
+# read the file, user is not saved and not uploaded, if file do not exists, rise error.
 def read(path, name):
     lista = []
     p1 = Path(path)
@@ -123,6 +127,8 @@ def read(path, name):
 # user is precedently uploaded, here the file is saved every since interaction
 # post use a list to enable different posts entry in a time
 # a dicotonary is used to store the element inputed by the user, afterwards is saved in profile
+# -addpost store the posts in a list since it can be store multiple at once
+# when user edit bio or post, the program ask to the user if want to publish online, if yes connect to the ds client
 def edit(operations, dict):
     if not manager.admin:
         print(a3.welcome_open)
@@ -141,12 +147,18 @@ def edit(operations, dict):
             profile1.username = dict['-usr']
         if dict['-bio'] != '':
             profile1.bio = dict['-bio']
+            a = input('Do you want to go online?: ')
+            if a.lower() == 'y':
+                ds_client.send(profile1.dsuserver, PORT, profile1.username, profile1.password, '', profile1.bio)
         if dict['-pwd'] != '':
             profile1.password = dict['-pwd']
         if dict['-addpost'] != '':
             for element in dict['-addpost']:
                 post = Post(element)
                 profile1.add_post(post)
+                a = input('Do you want to go online?: ')
+                if a.lower() == 'y':
+                    ds_client.send(profile1.dsuserver, PORT, profile1.username, profile1.password, profile1._posts[-1]['entry'], '')
         if dict['-delpost'] != '':
             profile1.del_post(int(dict['-delpost']) - 1)
         profile1.save_profile(p1)
@@ -154,7 +166,7 @@ def edit(operations, dict):
     manager.run()
 
 
-# profile is just printed, not saved
+# profile is just printed, not saved. Every element of the profile fill be avalable to the user without any change to it
 def output_print(operations, dict):
     if p1 == '':
         if not manager.admin:
