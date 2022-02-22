@@ -150,50 +150,27 @@ class Recursive:
 if admin mode is active and if user request to exit code'''
 
 
+# run function. The code loop back to this function in order to receive an input and check its validity
 def run():
-    global first, admin
+    global first, admin     # first variable checks if it's the first input received since the launch of the program, admin check if admin mode is active
     a = input()
-    if len(a) <= 1 and a != 'Q' and a != 'E' and a != 'P':
+    if len(a) <= 1 and a != 'Q' and a != 'E' and a != 'P':  # Check if input is not empty. Else, return to run
         print('ERROR')
         first = False
         run()
-    if (len(a) < 3 or a[0] == ' ') and a != 'Q' and a != 'E' and a != 'P':
+    if (len(a) < 3 or a[0] == ' ') and a != 'Q' and a != 'E' and a != 'P':  # Check if input do not start with a space. Else retrun to run
         print('ERROR')
         first = False
         run()
-    elif a == 'Q':
+    elif a == 'Q':  # quit program when user inputs Q
         if not admin:
             print(a3.goodbye)
         quit()
-    elif a == 'admin' and first:
+    elif a == 'admin' and first:    # activates admin mode only and only if it's first user input
         first = False
         admin = True
         run()
-    if a == 'join' or a == 'post' or a == 'bio':
-        if local_handle.p1 == '':
-            print(a3.Path_request)
-            check = input()
-            if check == 'Q':
-                print(a3.goodbye)
-                quit()
-            elif check == 'y':
-                p = input()
-                Process_path.DSP_path(p, a)
-            else:
-                run()
-        else:
-            print('we do have the path')
-            a3.join(local_handle.p1)
-
 
     else:
-        first = False
-        Process_path.process(a, admin)
-
-def server_run(path, a=None):
-    if a == 'join':
-        temp_name = input('insert name: ')
-        temp_pass = input("insert password: ")
-        if temp_pass != profile.password or temp_name != profile.username:
-            print('INSERT AGAIN. Name and\\or password is incorrect')
-            server_run(path, a)
+        first = False   # admin cannot be activated anymore
+        Process_path.process(a, admin)  # The user input after first validation moves to the processing of the string
