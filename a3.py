@@ -3,7 +3,9 @@
 # Starter code for assignment 2 in ICS 32 Programming with Software Libraries in Python
 
 # Replace the following placeholders with your information.
-
+# Trevor walker
+# walkertk@uci.edu
+# 35049080
 # Ervin Grimaldi
 # egrimal1@uci.edu
 # 51767760
