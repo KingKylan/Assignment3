@@ -1,3 +1,6 @@
+# Trevor Walker
+# walkertk@uci.edu
+# 35049080
 import socket
 import json
 from collections import namedtuple
