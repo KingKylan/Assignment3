@@ -13,7 +13,7 @@ import local_handle
 import manager
 import time
 
-# divide and handle path, check the OS of the user and adapt based on it
+# divide and handle path, check the OS of the user and adapt based on it split strings based on the operation that is requested.
 def process(string, admin):
     name = ''
     path = ''
@@ -76,8 +76,9 @@ def process(string, admin):
             string = string[2:]
             operations = [i for i in string.split(" ")]
     command(cmd, path, operations, name, admin)
-
-
+    
+    
+# Deals with handeling the path and input to put it in a usable format.
 def DSP_path(p, a):
     if platform == 'win32':
         name_file = [i for i in p.split(' ') if '\\' not in i]
